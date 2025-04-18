@@ -1,41 +1,39 @@
 import { useState } from 'react';
-import SignUp from './SignUp';
 import { Link, useNavigate } from 'react-router-dom';
 
 
-function Login() {
+function Login( { onLogin }) {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState(null);
-    const [token, setToken] = useState(null);
     const navigate = useNavigate();
 
     async function handleSubmit(e) {
-        e.preventDefault();
-        try {
-            const res = await fetch(
-                'https://fsa-recipe.up.railway.app/api/auth/login',
-                {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({username, password}),
-                }
-            );
-
-            const result = await res.json();
-            console.log('Logged in:', result);
-            setToken(result.token);
-
-            if (token === localStorage.getItem('token')) {
-            navigate('/recipes');
-            }else {
-                setError('Invalid username or password!');
-            }
-        } catch (error) {
-            setError(error.message);
+      e.preventDefault();
+      try {
+        const res = await fetch("https://fsa-recipe.up.railway.app/api/auth/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            username: username.trim(),
+            password,
+          }),
+        });
+    
+        if (!res.ok) {
+          const error = await res.json();
+          throw new Error(error.message || "Login failed");
         }
+    
+        const { token } = await res.json();
+        onLogin(token);
+        localStorage.setItem("token", token);
+        navigate("/recipes");
+
+
+      } catch (error) {
+        setError(error.message);
+      }
     }
 
 

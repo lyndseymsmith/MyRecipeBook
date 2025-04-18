@@ -1,16 +1,22 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 function SignUp() {
-  const [username, setUserName] = useState(" ");
-  const [password, setPassword] = useState(" ");
+  const [username, setUserName] = useState("");
+  const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
   const [validateMessage, setValidateMessage] = useState("");
- 
+  const navigate = useNavigate();
 
   async function handleSubmit(event) {
     event.preventDefault();
     //console.log("Submitting form...")
 
+    const cleanUsername = username.trim();
+    if (cleanUsername.length === 0) {
+      setValidateMessage("Username can't be blank.");
+      return;
+    }
     if (password.trim().length < 6) {
       setValidateMessage("Password must be at least 6 characters long.");
       return;
@@ -23,21 +29,22 @@ function SignUp() {
         {
           method: "POST",
           headers: {
-            "Content-Type": "application/json",
-          },
+            "Content-Type": "application/json",},
           body: JSON.stringify({
             username,
             password,
           }),
         }
       );
-      const result = await response.json();
-      console.log("Result", result);
-      // Store in local storage
-        localStorage.setItem("token", result.token);
-    } catch (error) {
-      console.log("Error signing up", error);
-      setError(error.message);
+      if (!response.ok) {
+        const errData = await response.json();
+        throw new Error(errData.message || "Signup failed");
+      }
+      const { token } = await response.json();
+      localStorage.setItem("token", token);
+      navigate("/login");
+    } catch (err) {
+      setError(err.message);
     }
   }
 
@@ -45,14 +52,14 @@ function SignUp() {
     <>
       <form onSubmit={handleSubmit}>
         <label>
-          Username:{" "}
+          Username:{""}
           <input
             value={username}
             onChange={(e) => setUserName(e.target.value)}
           />
         </label>
         <label>
-          Password:{" "}
+          Password:{""}
           <input
             value={password}
             onChange={(e) => setPassword(e.target.value)}
