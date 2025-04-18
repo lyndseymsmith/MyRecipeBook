@@ -40,12 +40,12 @@ function RecipeDetail() {
         />
       )}
       <h3>Ingredients:</h3>
-      <ul>
+      <ul className="ingredients-list">
         {recipe.ingredients &&
           recipe.ingredients.map((ing, idx) => <li key={idx}>{ing}</li>)}
       </ul>
       <h3>Instructions:</h3>
-      <p>{recipe.strInstructions}</p>
+      <p className="instructions">{recipe.strInstructions}</p>
     </div>
   );
 }
