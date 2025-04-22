@@ -72,10 +72,13 @@ button {
   font-size: 1rem;
   font-weight: 600;
 }
+
 button:hover {
   background-color: #2c514cff;
   color: #fff;
   border: none;
+  transform: scale(1.05);
+  transition: transform 0.2s;
 }
 button:focus,
 button:focus-visible {
@@ -132,6 +135,8 @@ button:focus-visible {
 
 .recipe-card button:hover {
   background-color: #2C514C;
+  transform: scale(1.05);
+  transition: transform 0.2s;
 }
 
 .ingredients-list {
@@ -142,9 +147,25 @@ button:focus-visible {
   flex-direction: column;
   align-items: left;
   gap: 0.5rem;
-  background-color: #666;
+  background-color: rgb(188, 204, 172);
   border-radius: 8px;
 }
+
+.login-button {
+  cursor: pointer;
+  border: none;
+  background-color: #2c514cff;
+  color: #fff;
+  padding: 0.5rem 1rem;
+  margin-left: 2rem;
+  border-radius: 4px;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+
+
+
 
 
 

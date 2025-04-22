@@ -1,11 +1,13 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 function RecipeDetail() {
   const { id } = useParams();
   const [recipe, setRecipe] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     async function fetchRecipe() {
@@ -46,6 +48,9 @@ function RecipeDetail() {
       </ul>
       <h3>Instructions:</h3>
       <p className="instructions">{recipe.strInstructions}</p>
+      <div className="recipe-buttons">
+      <button type="button" onClick={() => navigate(-1)}>Back to Recipes</button>     
+      </div>
     </div>
   );
 }
